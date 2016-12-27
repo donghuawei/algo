@@ -1,0 +1,9 @@
+FROM aqitrade/flask-module 
+
+ADD . /algo
+
+ENV PYTHONPATH=.:/algo
+
+EXPOSE 8000
+
+CMD cd /algo && python algo/start.py 

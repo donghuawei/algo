@@ -1,0 +1,56 @@
+{
+  "/start":{
+
+    "config": {
+      "account": {
+        "accountID": 1001,
+        "accountType": "future",
+        "name": "testAccount",
+        "status": "verified",
+        "cashQty": 90,
+        "value": 100
+      },
+      "instrument": {
+        "instrumentID": 5000,
+        "instrumentType": "future",
+        "symbol": "ag1706",
+        "price": 4297
+      },
+      "position":[
+        {
+          "instrumentID": 5000,
+          "symbol": "ag1706",
+          "qty": 50,
+          "direction": "long"
+        }
+      ]
+       ......
+       other configuration about algorithm
+       ......
+    }
+  },
+
+  "subscriber/account": {
+    "accountID": 1001,
+    "accountType": "future",
+    "name": "testAccount",
+    "status": "verified",
+    "cashQty": 90,
+    "value": 100
+  },
+
+  "subscriber/instrument": {
+    "instrumentID": 5000,
+    "instrumentType": "future",
+    "symbol": "ag1706",
+    "price": 4297
+  },
+
+  "subscriber/position": {
+    "instrumentID": 5000,
+    "symbol": "ag1706",
+    "qty": 50,
+    "direction": "long"
+  }
+
+}
