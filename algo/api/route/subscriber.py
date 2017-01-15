@@ -4,7 +4,8 @@ from flask import request
 from flask_restplus import Resource
 from algo.api.restplus import api
 from algo.api.serializers import status, payload
-from algo.service.algo_manager import algoMgr
+from algo.service.algoManager import algoMgr
+from algo.service.SubscriberService import subscribeInstrument
 
 
 log = logging.getLogger(__name__)
@@ -21,7 +22,8 @@ class UpdateInstrument(Resource):
         update instrument data.
         """
         params = request.json
-        log.log("get latest instrument: {}".format(params))
+        #log.log("get latest instrument: {}".format(params))
+        subscribeInstrument(params)
         return None, 200
 
 

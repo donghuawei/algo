@@ -5,7 +5,7 @@ from flask import request
 from flask_restplus import Resource
 from algo.api.restplus import api
 from algo.api.serializers import status, payload
-from algo.service.algo_manager import algoMgr
+from algo.service.algoManager import algoMgr
 
 
 log = logging.getLogger(__name__)
@@ -75,6 +75,40 @@ class Status(Resource):
         """
         Return the app status.
         """
+        log.info(algoMgr.get_status())
+        data = {'status': algoMgr.get_status()}
+        return data, 200
+
+
+@ns.route('/init')
+class Status(Resource):
+
+    @api.marshal_with(status)
+    @api.expect(payload)
+    def post(self):
+        """
+        initialise app, by setting configuration.
+        """
+        params = request.json
+        log.info(params)
+
+        log.info(algoMgr.get_status())
+        data = {'status': algoMgr.get_status()}
+        return data, 200
+
+
+@ns.route('/config/update')
+class Status(Resource):
+
+    @api.marshal_with(status)
+    @api.expect(payload)
+    def post(self):
+        """
+        update app configuration .
+        """
+        params = request.json
+        log.info(params)
+
         log.info(algoMgr.get_status())
         data = {'status': algoMgr.get_status()}
         return data, 200

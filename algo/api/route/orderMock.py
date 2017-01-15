@@ -4,8 +4,8 @@ from flask import request
 from flask_restplus import Resource
 from algo.api.restplus import api
 from algo.api.serializers import status, payload
-from algo.service.algo_manager import algoMgr
-from algo.service.api_client import place_order, get_order_status
+from algo.service.algoManager import algoMgr
+from algo.service.apiClient import place_order, get_order_status
 
 log = logging.getLogger(__name__)
 

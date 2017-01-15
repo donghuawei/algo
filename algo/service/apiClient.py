@@ -3,7 +3,7 @@ API client to invoke platform, to get account value/ positions...etc
 """
 import requests
 import json
-from algo.service.algo_manager import algoMgr
+from algo.service.algoManager import algoMgr
 
 base_url = "http://localhost:9000"
 
@@ -20,8 +20,8 @@ def place_order(order_data):
     return response.json()
 
 
-def get_order_status():
-    url = base_url + "/orders"
+def get_order_status(order_id):
+    url = base_url + "/orders?orderIDs" + order_id
     headers = {'content-type': 'application/json'}
     response = requests.get(url)
     return response.json()

@@ -4,9 +4,9 @@ from flask import Flask, Blueprint
 from algo import settings
 from algo.api.route.app import ns as algo_app_namespace
 from algo.api.route.subscriber import ns as algo_subscriber_namespace
-from algo.api.route.order_mock import ns as algo_order_namespace
+from algo.api.route.orderMock import ns as algo_order_namespace
 from algo.api.restplus import api
-from service.algo_manager import algoMgr
+from service.algoManager import algoMgr
 
 app = Flask(__name__)
 logging.config.fileConfig('logging.conf')

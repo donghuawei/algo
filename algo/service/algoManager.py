@@ -34,8 +34,8 @@ class AlgoManager:
     """
     def start_app(self, config):
         self.config = config
-        self.account = config["account"]
-        self.instrument = config["instrument"]
+        #self.account = config["account"]
+        #self.instrument = config["instrument"]
         """
         init strategy based on config
         """
