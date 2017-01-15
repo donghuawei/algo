@@ -14,15 +14,15 @@ Build docker image
 Running Application
 ------------------------
 
-To start application run following script:
+To start application run following script (Then open http://localhost:8000/api/) :
 
 ```
-docker-compose up -d
+./start.sh
 ```
 
 To stop application use kill linux command
 
 ```
-docker-compose down
+./stop.sh
 ```
 
