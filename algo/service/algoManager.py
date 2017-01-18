@@ -11,8 +11,8 @@ class AlgoManager:
     __status = Status.Idle
     config = {}
     strategies = []
-    account = None
-    instrument = None
+    #account = None
+    #instrument = None
 
     def __init__(self):
         self.__status = Status.Idle
@@ -24,7 +24,7 @@ class AlgoManager:
         self.__status = Status.Running
 
     def set_status_stopped(self):
-        self.__status = Status.Running
+        self.__status = Status.Stopped
 
     def set_status_suspended(self):
         self.__status = Status.Suspended
@@ -42,16 +42,19 @@ class AlgoManager:
         """
         self.set_status_initialized()
 
-    def start_app(self, config):
-        self.config = config
+    def start_app(self):
+        self.set_status_running()
         #self.account = config["account"]
         #self.instrument = config["instrument"]
+
         """
         init strategy based on config
+        comment out first
         """
-        for strategy in self.strategies:
-            strategy.init()
-        self.set_status_running()
+        # for strategy in self.strategies:
+        #     strategy.init()
+        # self.set_status_running()
+
 
     def stop_app(self):
         self.set_status_stopped()

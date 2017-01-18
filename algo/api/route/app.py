@@ -17,14 +17,11 @@ ns = api.namespace('app', description='Operations related to AQI app')
 class StartApp(Resource):
 
     @api.marshal_with(status)
-    @api.expect(payload)
     def post(self):
         """
         Start the app.
         """
-        params = request.json
-        log.info(params)
-        algoMgr.start_app(params['config'])
+        algoMgr.start_app()
         return {'status': algoMgr.get_status()}, 200
 
 
@@ -32,13 +29,10 @@ class StartApp(Resource):
 class StopApp(Resource):
 
     @api.marshal_with(status)
-    @api.expect(payload)
     def post(self):
         """
         Stop the app.
         """
-        params = request.json
-        log.info(params)
         algoMgr.stop_app()
         return {'status': algoMgr.get_status()}, 200
 

@@ -22,7 +22,7 @@ class UpdateInstrument(Resource):
         update instrument data.
         """
         params = request.json
-        #log.log("get latest instrument: {}".format(params))
+        log.info("get latest instrument: {}".format(params))
         subscribeInstrument(params)
         return None, 200
 
@@ -36,7 +36,7 @@ class UpdateAccount(Resource):
         update account, cash value... etc
         """
         params = request.json
-        log.log("get latest account information: {}".format(params))
+        log.debug("get latest account information: {}".format(params))
         return None, 200
 
 
