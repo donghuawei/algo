@@ -8,7 +8,7 @@ from algo.service.algoManager import algoMgr
 base_url = "http://localhost:9000"
 
 
-def place_order(order_data):
+def place_order_api(order_data):
     url = base_url + "/orders"
     headers = {'content-type': 'application/json'}
     # get account and instrument information from algo_manager
@@ -20,9 +20,19 @@ def place_order(order_data):
     return response.json()
 
 
-def get_order_status(order_id):
-    url = base_url + "/orders?orderIDs" + order_id
-    headers = {'content-type': 'application/json'}
+def get_all_order_status_api():
+    url = base_url + "/orders"
     response = requests.get(url)
     return response.json()
+
+
+def get_order_status_api(order_id):
+    url = base_url + "/orders?orderIDs" + order_id
+    response = requests.get(url)
+    return response.json()
+
+
+def cancel_order_api(order_id):
+    url = base_url + "/orders?ids=" + order_id
+    requests.delete(url)
 

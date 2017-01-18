@@ -4,7 +4,7 @@ Algo manager
 from enum import Enum
 
 
-Status = Enum('Status', ('Idle', 'Running', 'Stopped', 'Suspended'))
+Status = Enum('Status', ('Idle', 'Initialized', 'Running', 'Stopped', 'Suspended'))
 
 
 class AlgoManager:
@@ -18,7 +18,7 @@ class AlgoManager:
         self.__status = Status.Idle
 
     def get_status(self):
-        return self.__status;
+        return self.__status
 
     def set_status_running(self):
         self.__status = Status.Running
@@ -29,9 +29,19 @@ class AlgoManager:
     def set_status_suspended(self):
         self.__status = Status.Suspended
 
+    def set_status_initialized(self):
+        self.__status = Status.Initialized
+
     """
     Operations on app
     """
+    def initialize_app(self, config):
+        """
+        TODO ==> init strategy
+
+        """
+        self.set_status_initialized()
+
     def start_app(self, config):
         self.config = config
         #self.account = config["account"]
