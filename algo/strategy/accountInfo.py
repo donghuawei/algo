@@ -142,7 +142,7 @@ class AccountInfo:
     # -----------------------------------------------------------------------------------------------------------------
     def __update_portfolio_account(self, profit_info):
         if profit_info:
-            account_data_list_ = self.__portfolio_account[profit_info[PORTFOLIO_ID]]
+            account_data_list_ = self.__portfolio_accounts[profit_info[PORTFOLIO_ID]]
             account_list_ = []
             account_profit_list_ = []
             account_info_ = {}
