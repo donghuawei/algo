@@ -22,6 +22,7 @@ class StartApp(Resource):
         Start the app.
         """
         algoMgr.start_app()
+        print("start app")
         return {'status': algoMgr.get_status()}, 200
 
 
@@ -75,7 +76,7 @@ class Status(Resource):
 
 
 @ns.route('/init')
-class Status(Resource):
+class Init(Resource):
 
     @api.marshal_with(status)
     @api.expect(payload)
@@ -84,9 +85,10 @@ class Status(Resource):
         initialise app, by setting configuration.
         """
         params = request.json
-        log.info(params)
 
-        log.info(algoMgr.get_status())
+        log.info(params)
+        algoMgr.initialize_app(params)
+
         data = {'status': algoMgr.get_status()}
         return data, 200
 

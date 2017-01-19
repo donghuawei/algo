@@ -2,6 +2,7 @@
 Algo manager
 """
 from enum import Enum
+from algo.strategy.strategyEntry import start, config, stop
 
 
 Status = Enum('Status', ('Idle', 'Initialized', 'Running', 'Stopped', 'Suspended'))
@@ -35,18 +36,19 @@ class AlgoManager:
     """
     Operations on app
     """
-    def initialize_app(self, config):
+    def initialize_app(self, setting):
         """
         TODO ==> init strategy
-
         """
+        # config in strategyEntry
+        config(setting)
         self.set_status_initialized()
 
     def start_app(self):
         self.set_status_running()
-        #self.account = config["account"]
-        #self.instrument = config["instrument"]
 
+        # start in strategyEntry
+        start()
         """
         init strategy based on config
         comment out first
@@ -55,8 +57,9 @@ class AlgoManager:
         #     strategy.init()
         # self.set_status_running()
 
-
     def stop_app(self):
+        # stop in strategyEntry
+        stop()
         self.set_status_stopped()
 
     def suspend_app(self):

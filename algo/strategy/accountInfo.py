@@ -8,43 +8,46 @@ from eventEngine import *
 
 class AccountInfo:
 
-    # __tradedRecords will be with the following format: { accountID : tradeData }
-    # tradeData is a dictionary type with the following format:{'accountID':'accountIDValue',
-    #                                                           'portfolioID':'portfolioIDValue',
-    #                                                           'orderRecords': 'orderRecordsValue'}
-    # orderRecordsValue is of List type with items defined as Dictionary Type { 'orderID': 'orderIDValue',
-    #                                                                   'exchangeOrderID':'exchangeOrderIDValue',
-    #                                                                    'instrumentID' : 'instrumentIDValue',
-    #                                                                    'createDate':'createDateValue'
-    #                                                                     'status':'statusValue',
-    #                                                                     'direction':'directionValue',
-    #                                                                     'tradedQty':'tradedQtyValue','qty':'qtyValue',
-    #                                                                     'price':'priceValue',
-    #                                                                     'statusMessage': 'statusMessageValue'
-    #                                                                     'expirationDate': 'expirationDateValue'}
-    #
-    __traded_records = {}
-
-    # __portfolio_accounts will save all the accounts under it with the format { portfolioID, accounts }
-    # accounts is of List type with the items defined as Dictionary Type { 'accountID': 'accountIDValue',
-    #                                                                     'validCash': 'validCashValue',
-    #                                                                     'instrumentProfits':'instrumentProfitsValue'}
-    # instrumentProfitsValue is of List type with the items {"instrumentID': 'instrumentIDValue',
-    #                                                        'profit':'profitValue',
-    #                                                        'profitPercentage':'profitPercentageValue'}
-    __portfolio_accounts = {}
-    __portfolio_accounts_item_name = [ACCOUNT_ID, VALID_CASH]
-    __portfolio_account_profit_item_name = [INSTRUMENT_ID, PROFIT, PROFIT_PERCENTAGE]
-
-    __stop_loss_setting = {}
-    __stop_loss_para_list = [STOPLOSS_PRICE, STOPLOSS_STATUS, STOPLOSS_DATE]
-
-    __account_related_item_name = [ACCOUNT_ID, PORTFOLIO_ID]
-    __order_related_item_name = [ORDER_ID, EXCHANGE_ORDER_ID, INSTRUMENT_ID, CREATE_DATE, STATUS, DIRECTION, TRADED_QTY,
-                                 QTY, PRICE, STATUS_MESSAGE, EXPIRATION_DATE]
-
     # -----------------------------------------------------------------------------------------------------------------
-    def __init__(self, event_engine, account_properties):
+    def __init__(self):
+        # __tradedRecords will be with the following format: { accountID : tradeData }
+        # tradeData is a dictionary type with the following format:{'accountID':'accountIDValue',
+        #                                                           'portfolioID':'portfolioIDValue',
+        #                                                           'orderRecords': 'orderRecordsValue'}
+        # orderRecordsValue is of List type with items defined as Dictionary Type { 'orderID': 'orderIDValue',
+        #                                                                   'exchangeOrderID':'exchangeOrderIDValue',
+        #                                                                    'instrumentID' : 'instrumentIDValue',
+        #                                                                    'createDate':'createDateValue'
+        #                                                                     'status':'statusValue',
+        #                                                                     'direction':'directionValue',
+        #                                                                     'tradedQty':'tradedQtyValue','qty':'qtyValue',
+        #                                                                     'price':'priceValue',
+        #                                                                     'statusMessage': 'statusMessageValue'
+        #                                                                     'expirationDate': 'expirationDateValue'}
+        #
+        self.__traded_records = {}
+
+        # __portfolio_accounts will save all the accounts under it with the format { portfolioID, accounts }
+        # accounts is of List type with the items defined as Dictionary Type { 'accountID': 'accountIDValue',
+        #                                                                     'validCash': 'validCashValue',
+        #                                                                     'instrumentProfits':'instrumentProfitsValue'}
+        # instrumentProfitsValue is of List type with the items {"instrumentID': 'instrumentIDValue',
+        #                                                        'profit':'profitValue',
+        #                                                        'profitPercentage':'profitPercentageValue'}
+        self.__portfolio_accounts = {}
+        self.__portfolio_accounts_item_name = [ACCOUNT_ID, VALID_CASH]
+        self.__portfolio_account_profit_item_name = [INSTRUMENT_ID, PROFIT, PROFIT_PERCENTAGE]
+
+        self.__stop_loss_setting = {}
+        self.__stop_loss_para_list = [STOPLOSS_PRICE, STOPLOSS_STATUS, STOPLOSS_DATE]
+
+        self.__account_related_item_name = [ACCOUNT_ID, PORTFOLIO_ID]
+        self.__order_related_item_name = [ORDER_ID, EXCHANGE_ORDER_ID, INSTRUMENT_ID, CREATE_DATE, STATUS, DIRECTION,
+                                          TRADED_QTY,
+                                          QTY, PRICE, STATUS_MESSAGE, EXPIRATION_DATE]
+        self.__event_engine = None
+
+    def config(self, event_engine, account_properties):
         self.__event_engine = event_engine
         if account_properties:
             account_data_list_ = dict_get(self.__portfolio_accounts, account_properties[PORTFOLIO_ID], DEFAULT_VALUE)
@@ -254,16 +257,16 @@ def test():
     account_info = AccountInfo(ee, account_properties)
     print(account_info.get_valid_cash(account_properties[PORTFOLIO_ID], account_properties[ACCOUNT_ID]))
     order_properties = {PORTFOLIO_ID: '01', ACCOUNT_ID: '00002', INSTRUMENT_ID:'2001', ORDER_ID: '1'}
-    trade_event = Event(EVENT_PROFITCHANGED,order_properties)
+    trade_event = AQIStrategyEvent(EVENT_PROFITCHANGED,order_properties)
     account_info.on_trade_data_update(trade_event)
     order_properties = {PORTFOLIO_ID: '01', ACCOUNT_ID: '00002', INSTRUMENT_ID:'2001', ORDER_ID: '1', QTY : 5}
-    trade_event = Event(EVENT_PROFITCHANGED,order_properties)
+    trade_event = AQIStrategyEvent(EVENT_PROFITCHANGED,order_properties)
     account_info.on_trade_data_update(trade_event)
     order_properties = {PORTFOLIO_ID: '01', ACCOUNT_ID: '00002', INSTRUMENT_ID:'2001', ORDER_ID: '2', QTY : 5}
-    trade_event = Event(EVENT_PROFITCHANGED,order_properties)
+    trade_event = AQIStrategyEvent(EVENT_PROFITCHANGED,order_properties)
     account_info.on_trade_data_update(trade_event)
     order_properties = {PORTFOLIO_ID: '01', ACCOUNT_ID: '00002', INSTRUMENT_ID:'2003', ORDER_ID: '3', QTY : 5}
-    trade_event = Event(EVENT_PROFITCHANGED,order_properties)
+    trade_event = AQIStrategyEvent(EVENT_PROFITCHANGED,order_properties)
     account_info.on_trade_data_update(trade_event)
     print(account_info.get_not_fully_traded_orders(order_properties[ACCOUNT_ID]))
 

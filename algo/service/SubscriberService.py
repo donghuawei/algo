@@ -1,9 +1,9 @@
-#from algo.event_engine.strategyEntry import *
+from algo.strategy.strategyEntry import *
 
 def subscribeInstrument(instrument):
     """
     create event
     """
-    #ee.put(Event(EVENT_LOG))
+    global_event_engine.put(AQIStrategyEvent(EVENT_MARKETDATA, instrument))
 
 

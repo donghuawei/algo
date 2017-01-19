@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-from queue import Queue, Empty
+from Queue import Queue, Empty
 from threading import Thread
 
 
@@ -90,7 +90,7 @@ class EventEngine:
 
 
 ########################################################################
-class Event:
+class AQIStrategyEvent:
     def __init__(self, type_=None, even_param_=None):
         """Constructor"""
         self.type_ = type_

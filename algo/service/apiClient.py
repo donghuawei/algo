@@ -3,7 +3,6 @@ API client to invoke platform, to get account value/ positions...etc
 """
 import requests
 import json
-from algo.service.algoManager import algoMgr
 
 base_url = "http://localhost:9000"
 
