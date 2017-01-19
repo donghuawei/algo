@@ -44,8 +44,7 @@ class AccountInfo:
 
         self.__account_related_item_name = [ACCOUNT_ID, PORTFOLIO_ID]
         self.__order_related_item_name = [ORDER_ID, EXCHANGE_ORDER_ID, INSTRUMENT_ID, CREATE_DATE, STATUS, DIRECTION,
-                                          TRADED_QTY,
-                                          QTY, PRICE, STATUS_MESSAGE, EXPIRATION_DATE]
+                                          TRADED_QTY, QTY, PRICE, STATUS_MESSAGE, EXPIRATION_DATE]
         self.__event_engine = None
 
     def config(self, event_engine, account_properties):
@@ -120,7 +119,7 @@ class AccountInfo:
             for order_data_ in order_records_list_:
                 if order_data_[INSTRUMENT_ID] == instrument_id_:
                     profit_ = (current_price_ - order_data_[PRICE]) * order_data_[TRADED_QTY]
-                    profit_percentage_ = format(profit_/(order_data_[PRICE] * order_data_[TRADED_QTY]),'.00%')
+                    profit_percentage_ = format(profit_/(order_data_[PRICE] * order_data_[TRADED_QTY]), '.00%')
                     profit_info_ = {PORTFOLIO_ID: portfolio_id_, ACCOUNT_ID: account_id_,
                                     INSTRUMENT_ID: instrument_id_, DIRECTION: order_data_[DIRECTION],
                                     PRICE: order_data_[PRICE], QTY: order_data_[QTY],
@@ -147,13 +146,12 @@ class AccountInfo:
             account_profit_list_ = []
             account_info_ = {}
             account_profit_info_ = {}
-            if account_data_list_ == DEFAULT_VALUE:
-                tmp_profit_info_ = profit_info
-                for key in tmp_profit_info_:
+            if account_data_list_:
+                for key in profit_info.items():
                     if key in self.__portfolio_accounts_item_name:
-                        account_info_[key] = tmp_profit_info_[key]
+                        account_info_[key] = profit_info[key]
                     elif key in self.__portfolio_account_profit_item_name:
-                        account_profit_info_[key] = tmp_profit_info_[key]
+                        account_profit_info_[key] = profit_info[key]
 
                 account_profit_list_.append(account_profit_info_)
                 account_info_[INSTRUMENT_PROFITS] = account_profit_list_
@@ -164,27 +162,24 @@ class AccountInfo:
                 is_instrument_profit_exist_ = False
                 for account_data_ in account_data_list_:
                     if account_data_[ACCOUNT_ID] == profit_info[ACCOUNT_ID]:
-                        tmp_profit_info_ = profit_info
-                        for key, value in tmp_profit_info_:
+                        for key, value in profit_info.items():
                             if key in self.__portfolio_accounts_item_name:
                                 account_data_[key] = value
                             elif key in self.__portfolio_account_profit_item_name:
                                 account_profit_list_ = account_data_[INSTRUMENT_PROFITS]
                                 for account_profit_info_ in account_profit_list_:
-                                    if account_profit_info_[INSTRUMENT_ID] == tmp_profit_info_[INSTRUMENT_ID]:
-                                        account_profit_info_[key] = tmp_profit_info_[key]
+                                    if account_profit_info_[INSTRUMENT_ID] == profit_info[INSTRUMENT_ID]:
+                                        account_profit_info_[key] = profit_info[key]
                                         is_instrument_profit_exist_ = True
                         is_account_exist_ = True
                         break
 
                 if not is_instrument_profit_exist_:
-                    tmp_profit_info_ = profit_info
-                    for key, value in tmp_profit_info_:
+                    for key, value in profit_info.items():
                         if key in self.__portfolio_account_profit_item_name:
                             account_profit_info_[key] = value
                     if not is_account_exist_:
-                        tmp_profit_info_ = profit_info
-                        for key, value in tmp_profit_info_:
+                        for key, value in profit_info.items():
                             if key in self.__portfolio_accounts_item_name:
                                 account_info_[key] = value
                         account_profit_list_.append(account_profit_info_)
