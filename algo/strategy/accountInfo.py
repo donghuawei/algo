@@ -147,7 +147,7 @@ class AccountInfo:
             account_info_ = {}
             account_profit_info_ = {}
             if account_data_list_:
-                for key in profit_info.items():
+                for key, value in profit_info.items():
                     if key in self.__portfolio_accounts_item_name:
                         account_info_[key] = profit_info[key]
                     elif key in self.__portfolio_account_profit_item_name:
