@@ -141,12 +141,12 @@ class AccountInfo:
     # -----------------------------------------------------------------------------------------------------------------
     def __update_portfolio_account(self, profit_info):
         if profit_info:
-            account_data_list_ = self.__portfolio_accounts[profit_info[PORTFOLIO_ID]]
+            account_data_list_ = dict_get(self.__portfolio_accounts,profit_info[PORTFOLIO_ID],DEFAULT_VALUE)
             account_list_ = []
             account_profit_list_ = []
             account_info_ = {}
             account_profit_info_ = {}
-            if account_data_list_:
+            if account_data_list_ == DEFAULT_VALUE:
                 for key, value in profit_info.items():
                     if key in self.__portfolio_accounts_item_name:
                         account_info_[key] = profit_info[key]
