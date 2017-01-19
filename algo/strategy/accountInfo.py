@@ -36,7 +36,8 @@ class AccountInfo:
         #                                                        'profitPercentage':'profitPercentageValue'}
         self.__portfolio_accounts = {}
         self.__portfolio_accounts_item_name = [ACCOUNT_ID, VALID_CASH]
-        self.__portfolio_account_profit_item_name = [INSTRUMENT_ID, PROFIT, PROFIT_PERCENTAGE]
+        self.__portfolio_account_profit_item_name = [INSTRUMENT_ID, DIRECTION, PRICE, QTY, TRADED_QTY,
+                                                     PROFIT, PROFIT_PERCENTAGE]
 
         self.__stop_loss_setting = {}
         self.__stop_loss_para_list = [STOPLOSS_PRICE, STOPLOSS_STATUS, STOPLOSS_DATE]
@@ -119,8 +120,11 @@ class AccountInfo:
             for order_data_ in order_records_list_:
                 if order_data_[INSTRUMENT_ID] == instrument_id_:
                     profit_ = (current_price_ - order_data_[PRICE]) * order_data_[TRADED_QTY]
-                    profit_percentage_ = profit_/(order_data_[PRICE] * order_data_[TRADED_QTY])
-                    profit_info_ = {PORTFOLIO_ID: portfolio_id_, ACCOUNT_ID: account_id_, INSTRUMENT_ID: instrument_id_,
+                    profit_percentage_ = format(profit_/(order_data_[PRICE] * order_data_[TRADED_QTY]),'.00%')
+                    profit_info_ = {PORTFOLIO_ID: portfolio_id_, ACCOUNT_ID: account_id_,
+                                    INSTRUMENT_ID: instrument_id_, DIRECTION: order_data_[DIRECTION],
+                                    PRICE: order_data_[PRICE], QTY: order_data_[QTY],
+                                    TRADED_QTY: order_data_[TRADED_QTY],
                                     PROFIT: profit_, PROFIT_PERCENTAGE: profit_percentage_}
                     self.__update_portfolio_account(profit_info_)
 
@@ -197,7 +201,10 @@ class AccountInfo:
             account_list_ = self.__portfolio_accounts[portfolio_id]
             for account_info_ in account_list_:
                 if account_info_[ACCOUNT_ID] == account_id:
-                    return account_info_[INSTRUMENT_PROFITS]
+                    valid_cash_ = account_info_[VALID_CASH]
+                    instrument_profit_ =  account_info_[INSTRUMENT_PROFITS]
+                    return {REMAINING_CASH: account_info_[VALID_CASH], ORDERS: instrument_profit_}
+
         except KeyError:
             return None
 

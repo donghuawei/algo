@@ -101,8 +101,8 @@ class DefensiveStrategy:
         elif self.__strategy_state[OPEN_STATUS] != OPEN_STATUS_INITIAL \
                 and self.__strategy_state[CLOSE_STATUS] != CLOSE_STATUS_FULL:
             is_sell_operation_ = False
-            for key, value in self.__strategy_close_params:
-                if event.even_param_[PRICE] == key:
+            for close_cond_ in self.__strategy_close_params:
+                if close_cond_[PRICE] == event.even_param_[PRICE]:
                     is_sell_operation_ = True
                     traded_qty_ = self.__account_info.get_traded_qty(self.__strategy_setting__[PORTFOLIO_ID],
                                                                      self.__strategy_setting__[ACCOUNT_ID],
@@ -113,7 +113,7 @@ class DefensiveStrategy:
                                       PORTFOLIO_ID: self.__strategy_setting__[PORTFOLIO_ID],
                                       INSTRUMENT_ID: self.__strategy_setting__[INSTRUMENT_ID],
                                       DIRECTION: DIRECTION_LONG,
-                                      PRICE: key, QTY: value,
+                                      PRICE: close_cond_[PRICE], QTY: close_cond_[VOLUME],
                                       TAG: TAG_DEFAULT_VALUE}
                         sell_event_ = AQIStrategyEvent(EVENT_SELL, sell_para_)
                         self.__event_engine.put(sell_event_)
@@ -131,17 +131,19 @@ class DefensiveStrategy:
 
     # ------------------------------------------------------------------------------------------------------------------
     def on_buy(self, event):
-        return buy(event.even_param_[ACCOUNT_ID], event.even_param_[PORTFOLIO_ID],
-                   event.even_param_[INSTRUMENT_ID], event.even_param_[DIRECTION],
-                   event.even_param_[PRICE], event.even_param_[QTY],
-                   event.even_param_[TAG])
+        buy_result_ = buy(event.even_param_[ACCOUNT_ID], event.even_param_[PORTFOLIO_ID],
+                          event.even_param_[INSTRUMENT_ID], event.even_param_[DIRECTION],
+                          event.even_param_[PRICE], event.even_param_[QTY],
+                          event.even_param_[TAG])
+        self.__event_engine.put(AQIStrategyEvent(EVENT_TRADE,buy_result_))
 
     # ------------------------------------------------------------------------------------------------------------------
     def on_sell(self, event):
-        return sell(event.even_param_[ACCOUNT_ID], event.even_param_[PORTFOLIO_ID],
-                    event.even_param_[INSTRUMENT_ID], event.even_param_[DIRECTION],
-                    event.even_param_[PRICE], event.even_param_[QTY],
-                    event.even_param_[TAG])
+        sell_result_ = sell(event.even_param_[ACCOUNT_ID], event.even_param_[PORTFOLIO_ID],
+                            event.even_param_[INSTRUMENT_ID], event.even_param_[DIRECTION],
+                            event.even_param_[PRICE], event.even_param_[QTY],
+                            event.even_param_[TAG])
+        self.__event_engine.put(AQIStrategyEvent(EVENT_TRADE, sell_result_))
 
     # ------------------------------------------------------------------------------------------------------------------
     def __register(self):
@@ -157,7 +159,7 @@ class DefensiveStrategy:
         #                                                                  self.__strategy_setting__[INSTRUMENT_ID])
         order_id_list_ = self.__account_info.get_not_fully_traded_orders(self.__strategy_setting__[ACCOUNT_ID])
         if not order_id_list_:
-            self.__thread_condition.wait()
+            self.__thread_condition.wait(1)
 
         self.__thread_condition.release()
 
@@ -188,6 +190,9 @@ class DefensiveStrategy:
 
     # ------------------------------------------------------------------------------------------------------------------
     def stop(self):
+        self.__thread_condition.acquire()
+        self.__thread_condition.notify_all()
+        self.__thread_condition.release()
         self.__active = False
         self.__query_thread.join()
         self.__event_engine.stop()
