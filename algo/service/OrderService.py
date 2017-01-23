@@ -17,7 +17,7 @@ def buy(account_id, portfolio_id, instrument_id, direction, price, qty, tag):
                   'qty': qty,
                   'tag': tag
                   }
-    place_order_api(order_data)
+    return place_order_api(order_data)
 
 
 def sell(account_id, portfolio_id, instrument_id, direction, price, qty, tag):
@@ -33,11 +33,11 @@ def sell(account_id, portfolio_id, instrument_id, direction, price, qty, tag):
                   'qty': -qty,
                   'tag': tag
                   }
-    place_order_api(order_data)
+    return place_order_api(order_data)
 
 def cancel_order(order_id):
     cancel_order_api(order_id)
 
 
 def get_order_status(order_id):
-    get_order_status_api(order_id)
+    return get_order_status_api(order_id)
