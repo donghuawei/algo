@@ -2,8 +2,7 @@
 Algo manager
 """
 from enum import Enum
-from algo.strategy.strategyEntry import start, config, stop
-
+from algo.strategy.strategyEntry import start, config, stop, global_account_info
 
 Status = Enum('Status', ('Idle', 'Initialized', 'Running', 'Stopped', 'Suspended'))
 
@@ -12,6 +11,7 @@ class AlgoManager:
     __status = Status.Idle
     config = {}
     strategies = []
+    callbackUrl = "http://localhost:9000"
     #account = None
     #instrument = None
 
@@ -40,6 +40,9 @@ class AlgoManager:
         """
         TODO ==> init strategy
         """
+        if setting.has_key("callbackUrl"):
+            self.callbackUrl = setting["callbackUrl"]
+
         # config in strategyEntry
         config(setting)
         self.set_status_initialized()
@@ -73,5 +76,13 @@ class AlgoManager:
         if Status.Running == self.__status:
             for strategy in self.strategies:
                 strategy.update(instrument)
+
+    def get_callbackUrl(self):
+        return self.callbackUrl
+
+    def get_result(self, portfolioID, accountID):
+        result = global_account_info.get_profit_info(portfolioID, accountID)
+        return result
+
 
 algoMgr = AlgoManager()
