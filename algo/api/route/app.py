@@ -8,7 +8,8 @@ from algo.api.serializers import status, payload
 from algo.service.algoManager import algoMgr
 
 
-log = logging.getLogger(__name__)
+logging.config.fileConfig('logging.conf')
+log = logging.getLogger("algo")
 
 ns = api.namespace('app', description='Operations related to AQI app')
 
@@ -22,7 +23,7 @@ class StartApp(Resource):
         Start the app.
         """
         algoMgr.start_app()
-        print("start app")
+        log.debug("app api =============> : start app")
         return {'status': algoMgr.get_status()}, 200
 
 
@@ -34,6 +35,7 @@ class StopApp(Resource):
         """
         Stop the app.
         """
+        log.debug("app api =============> : stop app")
         algoMgr.stop_app()
         return {'status': algoMgr.get_status()}, 200
 
@@ -86,6 +88,7 @@ class Init(Resource):
         """
         params = request.json
 
+        log.debug("app api  =============> : init app")
         log.info(params)
         algoMgr.initialize_app(params)
 
@@ -106,6 +109,23 @@ class Status(Resource):
         log.info(params)
 
         log.info(algoMgr.get_status())
+
         data = {'status': algoMgr.get_status()}
         return data, 200
+
+
+@ns.route('/result')
+class Status(Resource):
+
+    @api.expect(payload)
+    def post(self):
+        """
+        update app configuration .
+        """
+        params = request.json
+        portfolioID = params["portfolioID"]
+        accountID = params["accountID"]
+        result = algoMgr.get_result(portfolioID, accountID)
+
+        return {"result": result}, 200
 
