@@ -1,12 +1,18 @@
 # encoding: UTF-8
 
-from eventEngine import *
-from defensiveStrategy import *
-from accountInfo import *
+from strategy.event.eventEngine import *
+from strategy.defensive_strategy.defensiveStrategy import *
+from strategy.account.accountInfo import AccountInfo
+from strategy import StrategyLog
+from strategy.vtConstant import *
 
-global_event_engine = EventEngine()
-global_account_info = AccountInfo()
-global_dfs_strategy = DefensiveStrategy()
+# initial the logger for this strategy
+defensive_logger = StrategyLog(LOG_CONFIG_FILE, DEFENSIVE_LOGGER)
+
+
+global_event_engine = EventEngine(defensive_logger)
+global_account_info = AccountInfo(defensive_logger)
+global_dfs_strategy = DefensiveStrategy(defensive_logger)
 
 
 def config(strategy_setting):
